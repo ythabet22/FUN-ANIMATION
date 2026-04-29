@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw
 SIZE        = 240          # square canvas (px)
 BG_COLOR    = (255, 255, 255, 0)   # transparent background
 STAR_FILL   = (255, 215, 0)        # gold star body
-STAR_OUTLINE= (230, 180, 0)        # slightly darker outline
+STAR_OUTLINE = (230, 180, 0)       # slightly darker outline
 CHEEK_COLOR = (255, 160, 120, 120) # soft blush (semi-transparent)
 EYE_WHITE   = (255, 255, 255)
 EYE_OUTLINE = (50, 30, 10)
@@ -19,7 +19,7 @@ PUPIL_COLOR = (20, 20, 20)
 SHINE_COLOR = (255, 255, 255)
 MOUTH_COLOR = (200, 80, 80)
 
-CENTER   = SIZE // 2           # 120
+CENTER   = SIZE // 2           # horizontal and vertical midpoint of the canvas
 STAR_R   = 88                  # outer radius of star
 STAR_r   = 40                  # inner radius of star
 STAR_PTS = 5
@@ -116,6 +116,8 @@ def draw_frame(iris_x_offset: float) -> Image.Image:
               MOUTH_CX + MOUTH_W // 2, MOUTH_CY + MOUTH_H],
              start=10, end=170, fill=MOUTH_COLOR, width=3)
 
+    # Convert to 256-colour palette mode required for GIF output; ADAPTIVE
+    # selects the best palette for this specific frame's colour range.
     return img.convert("P", palette=Image.ADAPTIVE, colors=256)
 
 
@@ -164,7 +166,7 @@ def main():
     positions = eased_positions(TOTAL_FRAMES)
     frames    = [draw_frame(p) for p in positions]
 
-    out_path = "FUN-ANIMATION/star_avatar_reading.gif"
+    out_path = "star_avatar_reading.gif"
     frames[0].save(
         out_path,
         save_all=True,
